@@ -1,0 +1,18 @@
+{
+  "name": "webpad",
+  "version": "1.0.0",
+  "description": "A Simple note taking web application that is build with HTML, CSS and vanilla javascript only.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Testing Deez Nuts\" && exit 1"
+  },
+  "author": "Deepak Kumar",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.5.0",
+    "eslint-config-prettier": "^10.0.1"
+  }
+}
