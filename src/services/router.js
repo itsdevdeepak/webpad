@@ -5,7 +5,7 @@ export default class Router {
   #redirects;
   #initialized = false;
 
-  constructor(routes, redirects) {
+  constructor(routes, redirects = {}) {
     if (!this.#hasValidRoutes(routes)) throw new Error('Invalid routes');
     this.#routes = routes;
 
