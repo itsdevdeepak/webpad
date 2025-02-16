@@ -1,5 +1,7 @@
 export default class Theme {
-  static VALID_THEMES = ['dark', 'light', 'system'];
+  static VALID_COLOR_SCHEMES = ['dark', 'light', 'system'];
+  static VALID_FONTS = ['san-serif', 'serif', 'monospace'];
+
   #initialized = false;
   #mediaQuery;
 
@@ -10,51 +12,77 @@ export default class Theme {
 
     window.store = window.store || {};
     window.store.theme = this.getCurrentTheme();
-    this.setTheme(window.store.theme);
+    this.setColorScheme(window.store.theme.colorScheme);
+    this.setFont(window.store.theme.font);
 
     this.#mediaQuery.addEventListener(
       'change',
-      this.#handleThemeChange.bind(this)
+      this.#handleColorSchemeChange.bind(this)
     );
 
     this.#initialized = true;
   }
 
-  setTheme(theme) {
-    if (!this.#validateTheme(theme)) throw new Error('Invalid theme');
+  setColorScheme(colorScheme) {
+    if (!this.#isValidColorScheme(colorScheme))
+      throw new Error('Invalid Color Scheme');
 
-    window.store.theme = theme;
+    window.store.theme.colorScheme = colorScheme;
     const bodyElement = document.querySelector('body');
 
-    if (theme === 'system') {
-      bodyElement.dataset.theme = this.#mediaQuery.matches ? 'dark' : 'light';
+    if (colorScheme === 'system') {
+      bodyElement.dataset.colorScheme = this.#mediaQuery.matches
+        ? 'dark'
+        : 'light';
     } else {
-      bodyElement.dataset.theme = theme;
+      bodyElement.dataset.colorScheme = colorScheme;
     }
+  }
+
+  setFont(font) {
+    if (!this.#isValidFont(font)) throw new Error('Invalid Font');
+
+    window.store.theme.font = font;
+    document.querySelector('body').dataset.font = font;
   }
 
   getCurrentTheme() {
-    const storedTheme = window.store?.theme;
+    let { colorScheme, font } = window.store.theme || {
+      theme: 'system',
+      font: 'san-serif'
+    };
 
-    if (!storedTheme || !Theme.VALID_THEMES.includes(storedTheme)) {
-      return 'system';
+    if (!Theme.VALID_COLOR_SCHEMES.includes(colorScheme)) {
+      colorScheme = 'system';
     }
 
-    return storedTheme;
+    if (!Theme.VALID_FONTS.includes(font)) {
+      font = 'san-serif';
+    }
+
+    return { colorScheme, font };
   }
 
-  #validateTheme(theme) {
+  #isValidColorScheme(theme) {
     return !(
       !theme ||
       typeof theme !== 'string' ||
-      !Theme.VALID_THEMES.includes(theme)
+      !Theme.VALID_COLOR_SCHEMES.includes(theme)
     );
   }
 
-  #handleThemeChange() {
+  #isValidFont(font) {
+    return !(
+      !font ||
+      typeof font !== 'string' ||
+      !Theme.VALID_FONTS.includes(font)
+    );
+  }
+
+  #handleColorSchemeChange() {
     const currentTheme = this.getCurrentTheme();
     if (currentTheme === 'system') {
-      this.setTheme(currentTheme);
+      this.setColorScheme(currentTheme);
     }
   }
 }
