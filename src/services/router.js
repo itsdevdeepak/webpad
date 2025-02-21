@@ -45,7 +45,7 @@ export default class Router {
       const { view, location } = this.#routes[path];
       this.#attachNewElement(view(params), location, params);
     } else {
-      this.#attachNewElement(renderNotFound(), '.main');
+      this.#attachNewElement(renderNotFound(), 'body');
     }
 
     this.#bindNavigationEvents();
